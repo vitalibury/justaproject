@@ -1,0 +1,21 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-header {
+    flex-shrink: 0;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+}
+
+.page-footer {
+    flex-shrink: 0;
+}
+

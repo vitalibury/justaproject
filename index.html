@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons"
+      rel="stylesheet">
+    <title>IsSoftgram</title>
+  </head>
+  <body>
+    <header class="page-header">
+      <span class="logo">IsSoftGram</span>
+      <span class="material-icons logout">
+        logout
+      </span>
+    </header>
+
+    <div class="page-content">
+      <nav class="col col-navigation list-group">
+        <a href="#about" class="menu-btn list-group-item list-group-item-action">About</a>
+        <a href="#usersTable" class="menu-btn list-group-item list-group-item-action">Users</a>
+      </nav>
+      <main class="col col-content"></main>
+      <aside class="col col-advertisement">
+        <div class="advertisement">advertisement</div>
+      </aside>
+    </div>
+
+    <footer class="page-footer"></footer>
+
+    
+    <div class="popup hide-popup" id="popupContent">
+      <p>Вы уверены?</p>
+      <div class="popup-controls"></div>
+      <button class="btn btn-danger btn-popup-control btn-popup-confirm">Да</button>
+      <button class="btn btn-primary btn-popup-control btn-popup-cancel">Нет</button>
+    </div>
+    
+    <div class="overlay hide-overlay" id="overlay"></div>
+    
+
+
+    <template id="loginForm">
+      <form class="card login-form" novalidate>
+        <h5 class="card-title">Войти в учетную запись:</h5>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="email" class="form-label">Введите email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              data-validators="is-email(), required()"
+            />
+            <div class="error-container">
+              <span class="error-message error-message--required">Это обязательное поле</span>
+              <span class="error-message error-message--is-email">Введите корректный email</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Введите пароль:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              autocomplete="off"
+              data-validators="min-digits(2), max-length(10), min-length(3), required()"
+            />
+            <div class="error-container">
+              <span class="error-message error-message--required">Это обязательное поле</span>
+              <span class="error-message error-message--min-length">Минимальная длина должна быть 3 символа</span>
+              <span class="error-message error-message--max-length">Максимальная длина должна быть 10 символов</span>
+              <span class="error-message error-message--min-digits">Должны содержаться цифры</span>
+            </div>
+          </div>
+            <a class="registration-link">Зарегистрироваться</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary login-submit-btn">
+            Войти
+          </button>
+        </div>
+      </form>
+    </template>
+
+
+
+
+    <template id="registrationForm">
+      <form class="card registration-form" novalidate>
+        <h5 class="card-title">Регистрация:</h5>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="email" class="form-label">Введите email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              data-validators="is-email(), required()"
+            />
+            <div class="error-container">
+              <span class="error-message error-message--required">Это обязательное поле</span>
+              <span class="error-message error-message--is-email">Введите корректный email</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Введите пароль:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              autocomplete="off"
+              data-validators="min-digits(2), max-length(10), min-length(3), required()"
+            />
+            <div class="error-container">
+              <span class="error-message error-message--required">Это обязательное поле</span>
+              <span class="error-message error-message--min-length">Минимальная длина должна быть 3 символа</span>
+              <span class="error-message error-message--max-length">Максимальная длина должна быть 10 символов</span>
+              <span class="error-message error-message--min-digits">Должны содержаться цифры</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="passwordRepeat" class="form-label"
+              >Повторите пароль:</label
+            >
+            <input
+              type="password"
+              id="passwordRepeat  "
+              name="passwordRepeat"
+              class="form-control"
+              autocomplete="off"
+              data-validators="required()"
+            />
+            <div class="error-container">
+              <span class="error-message error-message--required">Это обязательное поле</span>
+              <span class="error-message error-message--not-equal">Пароли не совпадают</span>
+            </div>
+          </div>
+        </div>
+
+          <button type="submit" class="btn btn-primary registration-submit-btn">
+            Зарегистрироваться
+          </button>
+        </div>
+      </form>
+    </template>
+
+
+
+
+    <template id="usersTable">
+      <h4>Зарегистрированные пользователи</h4>
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Email пользователя</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+
+        </tbody>
+      </table>
+    </template>
+
+
+
+
+    <template id="userEditForm">
+      <form class="user-edit-form card">
+        <h5 class="card-title">Изменение учетной записи пользователя</h5>
+        <div class="form-group user-form-group">
+            <label for="country"><h6>Страна:</h6></label>
+          <div>
+            <select name="country" id="country">
+              <option value="null" disabled selected>Выберите страну</option>
+              <option value="Беларусь">Беларусь</option>
+              <option value="Украина">Украина</option>
+              <option value="Польша">Польша</option>
+              <option value="Литва">Литва</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group user-form-group">
+          <label for="birthDate"><h6>Дата рождения:</h6></label>
+          <input type="date" name="birthDate" id="birthDate" class="form-control">
+        </div>
+                
+        <div class="form-group user-form-group">
+          <h6>Пол:</h6>
+          <div class="form-check">
+          <input type="radio" name="userSex" id="male" value="Мужчина" class="form-check-input">
+          <label for="male" class="form-check-label">Мужчина</label>
+          </div>
+          <div class="form-check">
+            <input type="radio" name="userSex" id="female" value="Женщина" class="form-check-input">
+          <label for="female" class="form-check-label">Женщина</label>
+          </div>
+        </div>
+        
+        <div class="form-group user-form-group">
+        <h6>Интересы:</h6>
+        <div class="form-check">
+          <div>
+            <input type="checkbox" id="travels" class="form-check-input" value="travels">
+          <label for="travels" class="form-check-label">Путешествия</label>
+        </div>
+          <div>
+            <input type="checkbox" id="sport" class="form-check-input" value="sport">
+          <label for="sport" class="form-check-label">Спорт</label>
+        </div>
+          <div>
+            <input type="checkbox" id="technics" class="form-check-input" value="technics">
+          <label for="technics" class="form-check-label">Техника</label>
+        </div>
+          <div>
+            <input type="checkbox" id="design" class="form-check-input" value="design">
+          <label for="design" class="form-check-label">Дизайн</label>
+        </div>
+          <div>
+            <input type="checkbox" id="dancing" class="form-check-input" value="dancing">
+          <label for="dancing" class="form-check-label">Танцы</label>
+        </div>
+          <div>
+            <input type="checkbox" id="languages" class="form-check-input" value="languages">
+          <label for="languages" class="form-check-label">Иностранные языки</label>
+        </div>
+        </div>
+      </div>
+        <button type="submit" class="btn btn-primary user-edit-submit-btn">Сохранить</button>
+      </form>
+    </template>
+
+
+    <template id="about">
+      <section>
+        <h2>Study SPA project.</h2>
+        <hr>
+        <div>
+          <p>
+            A single-page application (<b>SPA</b>) is a web application or website that interacts with the user by dynamically rewriting the current web page with new data from the web server, instead of the default method of a web browser loading entire new pages. The goal is faster transitions that make the website feel more like a native app.
+          </p>
+          <p>
+            In a <b>SPA</b>, a page refresh never occurs; instead, all necessary HTML, JavaScript, and CSS code is either retrieved by the browser with a single page load,[1] or the appropriate resources are dynamically loaded and added to the page as necessary, usually in response to user actions. The page does not reload at any point in the process, nor does it transfer control to another page, although the location hash or the HTML5 History API can be used to provide the perception and navigability of separate logical pages in the application.
+          </p>
+          <hr>
+          <p style="text-align: end;">© Wikipedia</p>
+        </div>
+      </section>
+    </template>
+
+
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
