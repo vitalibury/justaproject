@@ -1,4 +1,4 @@
-import { hideOverlay, hidePopup } from "../utils.js";
+import utils from '../utils.js';
 
 export default class Popup {
 
@@ -16,8 +16,8 @@ export default class Popup {
         const cancelBtn = document.querySelector('.btn-popup-cancel');
 
         cancelBtn.addEventListener('click', () => {
-            hideOverlay();
-            hidePopup();
+            utils.hideOverlay();
+            utils.hidePopup();
         });
     };
 

@@ -1,4 +1,4 @@
-export const notificationsList = {
+const notificationsList = {
     registrationSuccess: 'Пользователь зарегистрирован.',
     emailFailed: 'Введите корректный email.',
     emailAlreadyExist: 'Пользователь с таким email уже существует. Войдите.',
@@ -8,4 +8,6 @@ export const notificationsList = {
     passwordIncorrect: 'Неверный пароль. Попробуйте снова, либо зарегистрируйтесь.',
     loginFailed: 'Такого пользователя не существует, зарегистрируйтесь.',
     signIn: 'Войдите в систему'
-}
+};
+
+export default notificationsList;

@@ -1,4 +1,4 @@
-import { findPageElement } from "../utils.js";
+import utils from '../utils.js';
 
 export default class RegistrationForm {
 
@@ -11,7 +11,7 @@ export default class RegistrationForm {
   };
 
   defineRegistrationForm = () => {
-    const registrationForm = findPageElement(".registration-form");
+    const registrationForm = utils.findPageElement(".registration-form");
     return registrationForm;
   };
 

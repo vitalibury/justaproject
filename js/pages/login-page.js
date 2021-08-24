@@ -1,4 +1,4 @@
-import { findPageElement } from '../utils.js';
+import utils from '../utils.js';
 
 
 export default class LoginForm {
@@ -12,7 +12,7 @@ export default class LoginForm {
   };
 
   defineLoginForm = () => {
-    const loginForm = findPageElement('.login-form');
+    const loginForm = utils.findPageElement('.login-form');
     return loginForm;
   };
 

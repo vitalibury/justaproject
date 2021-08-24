@@ -1,5 +1,5 @@
 import DataService from "../data-service.js";
-import { findPageElement } from "../utils.js";
+import utils from '../utils.js';
 
 export default class UserForm {
 
@@ -17,7 +17,7 @@ export default class UserForm {
     };
 
     renderUserFormContent(user) {
-        const loginForm = findPageElement('.user-edit-form');
+        const loginForm = utils.findPageElement('.user-edit-form');
 
         for(let i = 0; i <= 1; i++) {
             const valueForField = user[`${loginForm.elements[i].id}`];
@@ -46,7 +46,7 @@ export default class UserForm {
     };
 
     defineUserEditForm = () => {
-        const loginForm = findPageElement('.user-edit-form');
+        const loginForm = utils.findPageElement('.user-edit-form');
         return loginForm;
       };
 

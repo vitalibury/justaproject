@@ -8,24 +8,8 @@ import Router from "./router.js";
 import PushNotifications from "./push-notification.js";
 import Popup from "./pages/popup.js";
 
-import {
-  clearElementContent,
-  showOverlay,
-  hideOverlay,
-  showPopup,
-  hidePopup,
-  findPageElement,
-  findPageElements,
-  focusInputLabel,
-  getFormElement,
-  inputBlurHandler,
-  inputFocusHandler,
-  showElement,
-  hideElement,
-  clearRoute,
-  isAuthorized
-} from "./utils.js";
-import { notificationsList } from "./notifications-list.js";
+import utils from "./utils.js";
+import notificationsList from "./notifications-list.js";
 import { validateFormField, validateFormsEqual } from "./validation.js";
 
 
@@ -47,8 +31,6 @@ export default class App {
   };
 
   menuButtons = [];
-
-  isAuthorised = false;
 
   temporaryVariables = {
     selectedUserRow: null,
@@ -86,7 +68,7 @@ export default class App {
   init() {
     this.initComponents();
     this.initContainers();
-    this.menuButtons = [...findPageElements('.menu-btn')];
+    this.menuButtons = [...utils.findPageElements('.menu-btn')];
     this.dataService.init();
     this.notification.renderPushNotification(
       this.containers.headerContainer,
@@ -95,26 +77,26 @@ export default class App {
     // this.launchLoginPage(this.containers.contentContainer);
     // this.launchUsersTablePage();
     // this.launchUserEditPage();
-    const currMode = this.modes[clearRoute(window.location.hash)];
+    const currMode = this.modes[utils.clearRoute(window.location.hash)];
     currMode.call(this);
     this.setActiveMenuItem();
     window.addEventListener('hashchange', () => {
-      const mode = clearRoute(window.location.hash);
+      const mode = utils.clearRoute(window.location.hash);
       if(mode === 'usersTable' || mode === 'userEdit') {
-        hideElement(this.containers.contentContainer);
+        utils.hideElement(this.containers.contentContainer);
         this.setActiveMenuItem();
         setTimeout(() => {
-          isAuthorized() ? this.modes[mode].call(this) : this.redirectToAuthorization();
+          utils.isAuthorized() ? this.modes[mode].call(this) : this.redirectToAuthorization();
         }, 300);
       } else {
-        hideElement(this.containers.contentContainer);
+        utils.hideElement(this.containers.contentContainer);
         this.setActiveMenuItem();
         setTimeout(() => {
           this.modes[mode].call(this);
         }, 300);
       };
     });
-    findPageElement('.logout').addEventListener('click', this.logout);
+    utils.findPageElement('.logout').addEventListener('click', this.logout);
   };
 
   redirectToAuthorization = () => {
@@ -136,7 +118,7 @@ export default class App {
   // LOGIN PAGE
 
   launchLoginPage() {
-    clearElementContent(this.containers.contentContainer);
+    utils.clearElementContent(this.containers.contentContainer);
     this.login.renderLoginForm(this.containers.contentContainer);
     this.login
       .defineLoginForm()
@@ -144,13 +126,13 @@ export default class App {
     this.login
       .defineRegistrationLink()
       .addEventListener("click", this.handleRegistrationPageLink);
-    findPageElements("input").forEach((input) =>
-      input.addEventListener("focus", inputFocusHandler)
+      utils.findPageElements("input").forEach((input) =>
+      input.addEventListener("focus", utils.inputFocusHandler)
     );
-    findPageElements("input").forEach((input) =>
-      input.addEventListener("blur", inputBlurHandler)
+    utils.findPageElements("input").forEach((input) =>
+      input.addEventListener("blur", utils.inputBlurHandler)
     );
-    showElement(this.containers.contentContainer);
+    utils.showElement(this.containers.contentContainer);
   };
 
   handleLoginSubmit = (event) => {
@@ -158,8 +140,8 @@ export default class App {
     const loginForm = event.target;
 
     const { emailField, passwordField } = {
-      emailField: getFormElement(loginForm, "email"),
-      passwordField: getFormElement(loginForm, "password"),
+      emailField: utils.getFormElement(loginForm, "email"),
+      passwordField: utils.getFormElement(loginForm, "password"),
     };
 
     if (this.checkLoginForm(emailField, passwordField)) {
@@ -168,14 +150,14 @@ export default class App {
       this.login
         .defineRegistrationLink()
         .removeEventListener("click", this.handleRegistrationPageLink);
-      findPageElements("input").forEach((input) =>
-        input.removeEventListener("focus", inputFocusHandler)
+        utils.findPageElements("input").forEach((input) =>
+        input.removeEventListener("focus", utils.inputFocusHandler)
       );
-      findPageElements("input").forEach((input) =>
-        input.removeEventListener("blur", inputBlurHandler)
+      utils.findPageElements("input").forEach((input) =>
+        input.removeEventListener("blur", utils.inputBlurHandler)
       );
       // this.launchContentPage(emailField.value);
-      hideElement(this.containers.contentContainer);
+      utils.hideElement(this.containers.contentContainer);
       this.router.goTo('usersTable');
     };
   };
@@ -188,13 +170,13 @@ export default class App {
     this.login
       .defineRegistrationLink()
       .removeEventListener("click", this.handleRegistrationPageLink);
-    findPageElements("input").forEach((input) =>
-      input.removeEventListener("focus", inputFocusHandler)
+      utils.findPageElements("input").forEach((input) =>
+      input.removeEventListener("focus", utils.inputFocusHandler)
     );
-    findPageElements("input").forEach((input) =>
-      input.removeEventListener("blur", inputBlurHandler)
+    utils.findPageElements("input").forEach((input) =>
+      input.removeEventListener("blur", utils.inputBlurHandler)
     );
-    hideElement(this.containers.contentContainer);
+    utils.hideElement(this.containers.contentContainer);
     this.router.goTo('registration');
   };
 
@@ -202,8 +184,8 @@ export default class App {
     const isValidEmail = !validateFormField(email);
     const isValidPassword = !validateFormField(password);
 
-    focusInputLabel(email);
-    focusInputLabel(password);
+    utils.focusInputLabel(email);
+    utils.focusInputLabel(password);
 
     if (isValidEmail || isValidPassword) {
       return false;
@@ -235,18 +217,18 @@ export default class App {
   // REGISTRATION PAGE
 
   launchRegistrationPage() {
-    clearElementContent(this.containers.contentContainer);
+    utils.clearElementContent(this.containers.contentContainer);
     this.registration.renderRegistrationForm(this.containers.contentContainer);
     this.registration
       .defineRegistrationForm()
       .addEventListener("submit", this.handleRegistrationSubmit);
-    findPageElements("input").forEach((input) =>
-      input.addEventListener("focus", inputFocusHandler)
+      utils.findPageElements("input").forEach((input) =>
+      input.addEventListener("focus", utils.inputFocusHandler)
     );
-    findPageElements("input").forEach((input) =>
-      input.addEventListener("blur", inputBlurHandler)
+    utils.findPageElements("input").forEach((input) =>
+      input.addEventListener("blur", utils.inputBlurHandler)
     );
-    showElement(this.containers.contentContainer);
+    utils.showElement(this.containers.contentContainer);
   };
 
   handleRegistrationSubmit = (event) => {
@@ -254,9 +236,9 @@ export default class App {
     const registrationForm = event.target;
 
     const { emailField, passwordField, passwordRepeatField } = {
-      emailField: getFormElement(registrationForm, "email"),
-      passwordField: getFormElement(registrationForm, "password"),
-      passwordRepeatField: getFormElement(registrationForm, "passwordRepeat"),
+      emailField: utils.getFormElement(registrationForm, "email"),
+      passwordField: utils.getFormElement(registrationForm, "password"),
+      passwordRepeatField: utils.getFormElement(registrationForm, "passwordRepeat"),
     };
 
     if (
@@ -273,14 +255,14 @@ export default class App {
         notificationsList.registrationSuccess,
         "alert-success"
       );
-      findPageElements('input').forEach((input) =>
-        input.removeEventListener("focus", inputFocusHandler)
+      utils.findPageElements('input').forEach((input) =>
+        input.removeEventListener("focus", utils.inputFocusHandler)
       );
-      findPageElements('input').forEach((input) =>
-        input.removeEventListener("blur", inputBlurHandler)
+      utils.findPageElements('input').forEach((input) =>
+        input.removeEventListener("blur", utils.inputBlurHandler)
       );
       setTimeout(() => {
-        hideElement(this.containers.contentContainer);
+        utils.hideElement(this.containers.contentContainer);
         this.router.goTo('');
       }, 1000);
     };
@@ -292,9 +274,9 @@ export default class App {
     const isPasswordsEqual = !validateFormsEqual(password, passwordRepeat);
     const isValidPasswordRepeat = !validateFormField(passwordRepeat);
 
-    focusInputLabel(email);
-    focusInputLabel(password);
-    focusInputLabel(passwordRepeat);
+    utils.focusInputLabel(email);
+    utils.focusInputLabel(password);
+    utils.focusInputLabel(passwordRepeat);
 
     if (
       isValidEmail ||
@@ -325,46 +307,46 @@ export default class App {
   // USERS TABLE PAGE
 
   launchUsersTablePage() {
-    clearElementContent(this.containers.contentContainer);
+    utils.clearElementContent(this.containers.contentContainer);
     this.usersTable.renderTableLayout(this.containers.contentContainer);
     this.usersTable.renderTableContent(this.dataService.users);
-    findPageElements(".btn-edit-user").forEach((user) =>
+    utils.findPageElements(".btn-edit-user").forEach((user) =>
       user.addEventListener("click", this.handleUserEdit)
     );
-    findPageElements(".btn-delete-user").forEach((user) =>
+    utils.findPageElements(".btn-delete-user").forEach((user) =>
       user.addEventListener("click", this.handleUserDelete)
     );
-    showElement(this.containers.contentContainer);
+    utils.showElement(this.containers.contentContainer);
   };
 
   handleUserDelete = (e) => {
-    showOverlay();
-    showPopup();
-    findPageElement(".btn-popup-confirm").addEventListener("click", this.handleBtnConfirm);
-    findPageElement(".btn-popup-cancel").addEventListener("click", this.handleBtnCancel);
+    utils.showOverlay();
+    utils.showPopup();
+    utils.findPageElement(".btn-popup-confirm").addEventListener("click", this.handleBtnConfirm);
+    utils.findPageElement(".btn-popup-cancel").addEventListener("click", this.handleBtnCancel);
     overlay.addEventListener("click", this.handleBtnCancel);
     this.temporaryVariables.selectedUserRow = e.path[2];
   };
 
   handleUserEdit = (e) => {
-    findPageElements(".btn-edit-user").forEach((user) =>
+    utils.findPageElements(".btn-edit-user").forEach((user) =>
     user.removeEventListener("click", this.handleUserEdit)
   );
-    findPageElements(".btn-delete-user").forEach((user) =>
+    utils.findPageElements(".btn-delete-user").forEach((user) =>
     user.removeEventListener("click", this.handleUserDelete)
   );
     this.temporaryVariables.editingUserName = e.path[2].children[1].innerText;
-    hideElement(this.containers.contentContainer);
+    utils.hideElement(this.containers.contentContainer);
     this.router.goTo('userEdit')
   };
 
   handleBtnConfirm = (e) => {
     overlay.removeEventListener("click", this.handleBtnCancel);
-    findPageElement(".btn-popup-confirm").removeEventListener("click", this.handleBtnConfirm);
-    findPageElement(".btn-popup-cancel").removeEventListener("click", this.handleBtnCancel);
-    hidePopup();
-    hideOverlay();
-    hideElement(this.containers.contentContainer);
+    utils.findPageElement(".btn-popup-confirm").removeEventListener("click", this.handleBtnConfirm);
+    utils.findPageElement(".btn-popup-cancel").removeEventListener("click", this.handleBtnCancel);
+    utils.hidePopup();
+    utils.hideOverlay();
+    utils.hideElement(this.containers.contentContainer);
     setTimeout(() => {
       const editRowButton = this.temporaryVariables.selectedUserRow.children[2].children[0];
       const deleteRowButton = this.temporaryVariables.selectedUserRow.children[2].children[1];
@@ -374,16 +356,16 @@ export default class App {
       this.dataService.deleteUser(currentEmail);
       usersTableBody.removeChild(this.temporaryVariables.selectedUserRow);
       this.temporaryVariables.selectedUserRow = null;
-      showElement(this.containers.contentContainer);
+      utils.showElement(this.containers.contentContainer);
     }, 300);
   };
 
   handleBtnCancel = (e) => {
     overlay.removeEventListener("click", this.handleBtnCancel);
-    findPageElement(".btn-popup-confirm").removeEventListener("click", this.handleBtnConfirm);
-    findPageElement(".btn-popup-cancel").removeEventListener("click", this.handleBtnCancel);
-    hidePopup();
-    hideOverlay();
+    utils.findPageElement(".btn-popup-confirm").removeEventListener("click", this.handleBtnConfirm);
+    utils.findPageElement(".btn-popup-cancel").removeEventListener("click", this.handleBtnCancel);
+    utils.hidePopup();
+    utils.hideOverlay();
     this.temporaryVariables.selectedUserRow = null;
   };
 
@@ -391,12 +373,12 @@ export default class App {
   // USER EDIT PAGE
 
   launchUserEditPage() {
-    clearElementContent(this.containers.contentContainer);
+    utils.clearElementContent(this.containers.contentContainer);
     this.userForm.renderUserForm(this.containers.contentContainer);
     const currUser = this.dataService.getUser(this.temporaryVariables.editingUserName);
     this.userForm.renderUserFormContent(currUser);
     this.userForm.defineUserEditForm().addEventListener('submit', this.handleUserEditSubmit);
-    showElement(this.containers.contentContainer);
+    utils.showElement(this.containers.contentContainer);
   };
 
   handleUserEditSubmit = (e) => {
@@ -407,7 +389,7 @@ export default class App {
     this.dataService.saveUsers();
     this.userForm.defineUserEditForm().removeEventListener('submit', this.handleUserEditSubmit);
     this.temporaryVariables.editingUserName = null;
-    hideElement(this.containers.contentContainer);
+    utils.hideElement(this.containers.contentContainer);
     this.router.goTo('usersTable');
   };
 
@@ -415,9 +397,9 @@ export default class App {
   // CONTENT PAGE
 
   launchAboutPage() {
-    clearElementContent(this.containers.contentContainer);
+    utils.clearElementContent(this.containers.contentContainer);
     this.about.renderAboutPage(this.containers.contentContainer);
-    showElement(this.containers.contentContainer);
+    utils.showElement(this.containers.contentContainer);
   };
 };
 

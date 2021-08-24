@@ -1,4 +1,4 @@
-import { hideElement, showElement } from "./utils.js";
+import utils from './utils.js';
 
 export default class PushNotifications {
 
@@ -18,9 +18,9 @@ export default class PushNotifications {
     notification.classList.remove("alert-danger");
     notification.innerHTML = content;
     notification.classList.add(status);
-    showElement(notification);
+    utils.showElement(notification);
     setTimeout(() => {
-      hideElement(notification);
+      utils.hideElement(notification);
       notification.innerHTML = "";
     }, 1500);
   };

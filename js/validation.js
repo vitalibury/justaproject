@@ -1,14 +1,14 @@
-import { testWithRegExp } from "./utils.js";
+import utils from './utils.js';
 
 export const validatorsList = {
   'required': (value) => !!(value.length === 0),
   'min-length': (value, param) => !!(value.length < param),
   'max-length': (value, param) => !!(value.length > param),
-   'is-email': (value) => !(testWithRegExp(
+   'is-email': (value) => !(utils.testWithRegExp(
     /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
     value
    )),
-   'min-digits': (value) => !(testWithRegExp(/\d\w{0,8}\d/, value))
+   'min-digits': (value) => !(utils.testWithRegExp(/\d\w{0,8}\d/, value))
 };
 
 export const validateFormField = (input) => {
