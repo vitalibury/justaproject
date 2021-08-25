@@ -30,11 +30,11 @@ const utils = {
     return checkList.every(check => check(value));
   },
   
-  inputFocusHandler (e) {
+  handleInputFocus (e) {
     e.target.previousElementSibling.classList.add('on-focus');
   },
   
-  inputBlurHandler (e) {
+  handleInputBlur (e) {
     const container = e.target.closest('.form-group');
     const fieldValue = e.target.value;
     if (!container.classList.contains('has-error') && !fieldValue) {
@@ -63,17 +63,25 @@ const utils = {
   },
   
   showPopup () {
-    const popup = findPageElement('.popup');
-    popupContent.classList.remove('hide-popup');
+    const popup = this.findPageElement('.popup');
+    popup.classList.remove('hide-popup');
   },
   
   hidePopup () {
-    const popup = findPageElement('.popup');
+    const popup = this.findPageElement('.popup');
     popup.classList.add('hide-popup');
   },
   
-  clearRoute (route) {
-    return route.split('').splice(1).join('');
+  clearRouteHash () {
+    return window.location.hash.split('').splice(1).join('');
+  },
+
+  getModeFromHash () {
+    return this.clearRouteHash().split('/')[0];
+  },
+
+  getRouteParameter (number) {
+    return this.clearRouteHash().split('/')[number];
   },
   
   isAuthorized () {

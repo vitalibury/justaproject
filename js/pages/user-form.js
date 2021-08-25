@@ -1,22 +1,35 @@
-import DataService from "../data-service.js";
+import modes from '../modes.js';
+import notificationsList from '../notifications-list.js';
+import PushNotifications from '../push-notification.js';
+import Router from '../router.js';
 import utils from '../utils.js';
 
 export default class UserForm {
 
     dataService = null;
-
+    contentContainer = null;
     layout = null;
+    router = null;
+    notification = null;
 
-    constructor() {
-        this.dataService = new DataService();
+    constructor(dataService) {
+        this.dataService = dataService;
         this.layout = userEditForm;
+        this.contentContainer = mainContent;
+        this.router = new Router();
+        this.notification = new PushNotifications();
+        modes['userEdit'] = this.renderUserFormPage;
     }
 
-    renderUserForm(target) {        
-        target.innerHTML = this.layout.innerHTML;
+    renderUserFormPage = () => {      
+        utils.clearElementContent(this.contentContainer);  
+        this.contentContainer.innerHTML = this.layout.innerHTML;
+        const currUser = this.dataService.getUser(utils.getRouteParameter(1));
+        this.renderUserFormContent(currUser);
+        utils.showElement(this.contentContainer);
     };
 
-    renderUserFormContent(user) {
+    renderUserFormContent = (user) => {
         const loginForm = utils.findPageElement('.user-edit-form');
 
         for(let i = 0; i <= 1; i++) {
@@ -45,11 +58,6 @@ export default class UserForm {
 
     };
 
-    defineUserEditForm = () => {
-        const loginForm = utils.findPageElement('.user-edit-form');
-        return loginForm;
-      };
-
     updateUserObject(formElements, user) {
         for (let i = 0; i <= 1; i++) {
             const fieldName = formElements[i].id;
@@ -74,5 +82,13 @@ export default class UserForm {
 
         return user;
     };
+
+    handleUserEditSubmit = (userForm) => {
+        const currUser = this.dataService.getUser(utils.getRouteParameter(1));
+        const updatedUser = this.updateUserObject(userForm.elements, currUser);
+        this.notification.showPushNotification(notificationsList.savingSuccess, 'alert-success');
+        utils.hideElement(this.contentContainer);
+        this.router.goTo('usersTable');
+      };
 
 };

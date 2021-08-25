@@ -2,13 +2,17 @@ import utils from './utils.js';
 
 export default class PushNotifications {
 
-  constructor() {}
+  headerContainer = null;
 
-  renderPushNotification = (target, method) => {
+  constructor() {
+    this.headerContainer = pageHeader;
+  }
+
+  renderPushNotification = () => {
     const pushHtml = `
         <div class="push-notification hide alert" role="alert" style="position: absolute;"></div>
         `;
-    target.insertAdjacentHTML(method, pushHtml);
+    this.headerContainer.insertAdjacentHTML("afterend", pushHtml);
   };
 
   showPushNotification = (content, status) => {

@@ -5,13 +5,7 @@ export default class DataService {
     users = null;
     DBName = appDBName;
 
-    constructor() {}
-
-    init() {
-        this.getUsers();
-    };
-
-    getUsers() {
+    constructor() {
         if (localStorage.getItem(this.DBName)) {
             const jsonUsers = localStorage.getItem(this.DBName);
             this.users = JSON.parse(jsonUsers);
@@ -19,13 +13,13 @@ export default class DataService {
             this.users = {};
             this.saveUsers();
         };
-    };
+    }
 
     saveUsers() {
         localStorage.setItem(this.DBName, JSON.stringify(this.users));
     };
 
-    getUser(email) {
+    getUser = (email) => {
         return this.users[email];
     };
 

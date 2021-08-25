@@ -1,87 +1,90 @@
+import modes from '../modes.js';
+import notificationsList from '../notifications-list.js';
+import PushNotifications from '../push-notification.js';
+import Router from '../router.js';
 import utils from '../utils.js';
+import { validateFormField, validateFormsEqual } from '../validation.js';
 
 export default class RegistrationForm {
 
-  constructor() {
+  contentContainer = null;
+  layout = null;
+  dataService = null;
+  router = null;
+  notification = null;
+
+  constructor(dataService) {
+    this.contentContainer = mainContent;
     this.layout = registrationForm;
+    this.dataService = dataService;
+    this.router = new Router();
+    this.notification = new PushNotifications();
+    modes['registration'] = this.renderRegistrationPage;
   }
 
-  renderRegistrationForm = (target) => {
-    target.innerHTML = this.layout.innerHTML;
+  renderRegistrationPage = () => {
+    utils.clearElementContent(this.contentContainer);
+    this.contentContainer.innerHTML = this.layout.innerHTML;
+    utils.showElement(this.contentContainer);
   };
 
-  defineRegistrationForm = () => {
-    const registrationForm = utils.findPageElement(".registration-form");
-    return registrationForm;
+  handleRegistrationSubmit = (registrationForm) => {
+
+    const { emailField, passwordField, passwordRepeatField } = {
+      emailField: utils.getFormElement(registrationForm, "email"),
+      passwordField: utils.getFormElement(registrationForm, "password"),
+      passwordRepeatField: utils.getFormElement(registrationForm, "passwordRepeat"),
+    };
+
+    if (
+      this.checkRegistartionForm(emailField, passwordField, passwordRepeatField)
+    ) {
+      const email = emailField.value;
+      const password = passwordField.value;
+      const newUser = { password: password };
+      this.dataService.createUser(email, newUser);
+      this.notification.showPushNotification(
+        notificationsList.registrationSuccess,
+        "alert-success"
+      );
+      setTimeout(() => {
+        this.router.goTo('');
+      }, 1000);
+    };
+  };
+
+  checkRegistartionForm(email, password, passwordRepeat) {
+    const isValidEmail = !validateFormField(email);
+    const isValidPassword = !validateFormField(password);
+    const isPasswordsEqual = !validateFormsEqual(password, passwordRepeat);
+    const isValidPasswordRepeat = !validateFormField(passwordRepeat);
+
+    utils.focusInputLabel(email);
+    utils.focusInputLabel(password);
+    utils.focusInputLabel(passwordRepeat);
+
+    if (
+      isValidEmail ||
+      isValidPassword ||
+      isValidPasswordRepeat ||
+      isPasswordsEqual
+    ) {
+      return false;
+    };
+
+    const user = this.dataService.getUser(email.value.trim());
+    if (user) {
+      this.notification.showPushNotification(
+        notificationsList.emailAlreadyExist,
+        "alert-warning"
+      );
+
+      return false;
+
+    };
+
+    return true;
+
   };
 
 };
-
-
-//
-
-
-
-
-// export const addRegistrationForm = (target, method) => {
-//   const registrationFormHtml = `
-//     <form class='card registration-form'>
-//   <h5 class='card-title'>Регистрация:</h5>
-//   <div class='card-body'>
-//     <div class='mb-3'>
-//       <label for='email' class='form-label'>Введите email:</label>
-//       <input
-//         type='email'
-//         id='email'
-//         name='email'
-//         placeholder='example@mail.com'
-//         class='form-control'
-//         required
-//       />
-//     </div>
-
-//     <div class='mb-3'>
-//       <label for='password' class='form-label'>Введите пароль:</label>
-//       <input
-//         type='password'
-//         id='password'
-//         name='password'
-//         class='form-control'
-//         autocomplete='off'
-//         maxlength='10'
-//         required
-//       />
-//     </div>
-
-//     <div class='mb-3'>
-//       <label for='passwordRepeat' class='form-label'>Повторите пароль:</label>
-//       <input
-//         type='password'
-//         id='passwordRepeat  '
-//         name='passwordRepeat'
-//         class='form-control'
-//         autocomplete='off'
-//         maxlength='10'
-//         required
-//       />
-//     </div>
-
-//     <button type='submit' class='btn btn-primary registration-submit-btn'>
-//       Зарегистрироваться
-//     </button>
-//   </div>
-// </form>
-//     `;
-
-//   target.insertAdjacentHTML(method, registrationFormHtml);
-// };
-
-// export const defineRegistrationSubmitBtn = () => {
-//   const submitButton = findPageElement(".registration-submit-btn");
-//   return submitButton;
-// };
-
-// export const createUser = (email, password) => {
-//   localStorage.setItem(`isSoftGramEmail_${email}`, email);
-//   localStorage.setItem(`isSoftGramPass_${password}`, password);
-// };

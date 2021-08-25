@@ -16,7 +16,7 @@
     <title>IsSoftgram</title>
   </head>
   <body>
-    <header class="page-header">
+    <header class="page-header" id="pageHeader">
       <span class="logo">IsSoftGram</span>
       <span class="material-icons logout" title="Выйти">
         logout
@@ -28,7 +28,7 @@
         <a href="#about" class="menu-btn list-group-item list-group-item-action">About</a>
         <a href="#usersTable" class="menu-btn list-group-item list-group-item-action">Users</a>
       </nav>
-      <main class="col col-content"></main>
+      <main class="col col-content" id="mainContent"></main>
       <aside class="col col-advertisement">
         <div class="advertisement">advertisement</div>
       </aside>
@@ -40,7 +40,7 @@
     <div class="popup hide-popup" id="popupContent">
       <p>Вы уверены?</p>
       <div class="popup-controls"></div>
-      <button class="btn btn-danger btn-popup-control btn-popup-confirm">Да</button>
+      <button class="btn btn-danger btn-popup-control btn-popup-confirm" id="popupConfirm">Да</button>
       <button class="btn btn-primary btn-popup-control btn-popup-cancel">Нет</button>
     </div>
     
@@ -58,7 +58,7 @@
               type="email"
               id="email"
               name="email"
-              class="form-control"
+              class="form-control auth-input"
               data-validators="is-email(), required()"
             />
             <div class="error-container">
@@ -73,7 +73,7 @@
               type="password"
               id="password"
               name="password"
-              class="form-control"
+              class="form-control auth-input"
               autocomplete="off"
               data-validators="min-digits(2), max-length(10), min-length(3), required()"
             />
@@ -84,7 +84,7 @@
               <span class="error-message error-message--min-digits">Должны содержаться цифры</span>
             </div>
           </div>
-            <a class="registration-link">Зарегистрироваться</a>
+            <a href="#registration" class="registration-link">Зарегистрироваться</a>
           </div>
 
           <button type="submit" class="btn btn-primary login-submit-btn">
@@ -107,7 +107,7 @@
               type="email"
               id="email"
               name="email"
-              class="form-control"
+              class="form-control auth-input"
               data-validators="is-email(), required()"
             />
             <div class="error-container">
@@ -122,7 +122,7 @@
               type="password"
               id="password"
               name="password"
-              class="form-control"
+              class="form-control auth-input"
               autocomplete="off"
               data-validators="min-digits(2), max-length(10), min-length(3), required()"
             />
@@ -142,7 +142,7 @@
               type="password"
               id="passwordRepeat  "
               name="passwordRepeat"
-              class="form-control"
+              class="form-control auth-input"
               autocomplete="off"
               data-validators="required()"
             />
