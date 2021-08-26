@@ -2,30 +2,22 @@ import utils from './utils.js';
 
 export default class PushNotifications {
 
-  headerContainer = null;
+  notificationContainer = null;
 
   constructor() {
-    this.headerContainer = pageHeader;
+    this.notificationContainer = notificationContainer;
   }
 
-  renderPushNotification = () => {
-    const pushHtml = `
-        <div class="push-notification hide alert" role="alert" style="position: absolute;"></div>
-        `;
-    this.headerContainer.insertAdjacentHTML("afterend", pushHtml);
-  };
-
   showPushNotification = (content, status) => {
-    const notification = document.querySelector(".push-notification");
-    notification.classList.remove("alert-success");
-    notification.classList.remove("alert-warning");
-    notification.classList.remove("alert-danger");
-    notification.innerHTML = content;
-    notification.classList.add(status);
-    utils.showElement(notification);
+    this.notificationContainer.classList.remove("alert-success");
+    this.notificationContainer.classList.remove("alert-warning");
+    this.notificationContainer.classList.remove("alert-danger");
+    this.notificationContainer.innerHTML = content;
+    this.notificationContainer.classList.add(status);
+    utils.showElement(this.notificationContainer);
     setTimeout(() => {
-      utils.hideElement(notification);
-      notification.innerHTML = "";
+      utils.hideElement(this.notificationContainer);
+      this.notificationContainer.innerHTML = "";
     }, 1500);
   };
 
