@@ -40,4 +40,15 @@ export default class DataService {
         this.saveUsers();
     };
 
+    get appAuthorization() {
+        return sessionStorage.getItem('isSoftGram_Authorized');
+    };
+
+    set appAuthorization(value) {
+        if(value === false) {
+            sessionStorage.removeItem('isSoftGram_Authorized');
+        } else {
+            sessionStorage.setItem('isSoftGram_Authorized', value);
+        };
+    };
 };

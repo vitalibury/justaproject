@@ -80,12 +80,14 @@ const utils = {
     return this.clearRouteHash().split('/')[0];
   },
 
+  findExistingMode (modes) {
+    const defaultMode = '404';
+    const currentMode = Object.keys(modes).find(mode => mode === this.getModeFromHash());
+    return currentMode === undefined ? defaultMode : currentMode;
+  },
+
   getRouteParameter (number) {
     return this.clearRouteHash().split('/')[number];
-  },
-  
-  isAuthorized () {
-    return sessionStorage.getItem('isAuthorized');
   }
 
 };

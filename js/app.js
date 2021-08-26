@@ -3,6 +3,7 @@ import RegistrationForm from "./pages/registration-page.js";
 import UsersTable from "./pages/users-table.js";
 import UserForm from "./pages/user-form.js";
 import About from "./pages/about-page.js";
+import PageNotFound from "./pages/not-found-page.js";
 
 import DataService from "./data-service.js";
 import Router from "./router.js";
@@ -19,6 +20,7 @@ export default class App {
   usersTable = null;
   userForm = null;
   about = null;
+  pageNotFound = null;
   router = null;
   popup = null;
 
@@ -29,8 +31,9 @@ export default class App {
     this.usersTable = new UsersTable(this.dataService);
     this.userForm = new UserForm(this.dataService);
     this.about = new About();
+    this.pageNotFound = new PageNotFound();
     this.popup = new Popup();
-    this.router = new Router();
+    this.router = new Router(this.dataService);
   }
 
   init() {

@@ -12,7 +12,15 @@
   left: 0;
   }
   50% {left: .2rem;}
+}
+
+@keyframes rotate {
+  from,
+  to {
+    transform: rotate(-20deg);
   }
+  50% {transform: rotate(+20deg);}
+}
 
 html,
 body {
@@ -198,6 +206,20 @@ body {
   text-align: center;
   border: 1px solid black;
   background-color: honeydew;
+}
+
+.page-not-found {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: flex-start;
+}
+
+.mood {
+  margin: 0 5px;
+  animation: rotate 1s linear  infinite;
 }
 
 .page-footer {

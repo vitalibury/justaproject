@@ -37,7 +37,7 @@ export default class LoginForm {
     };
 
     if (this.checkLoginForm(emailField, passwordField)) {
-      sessionStorage.setItem('isAuthorized', true);
+      this.dataService.appAuthorization = true;
       this.router.goTo('usersTable');
     };
   };

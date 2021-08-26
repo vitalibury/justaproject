@@ -6,12 +6,14 @@ import utils from "./utils.js";
 
 export default class Router {
 
+    dataService = null;
     notification = null;
     header = null;
     contentContainer = null;
     menuButtons = [];
 
-    constructor() {
+    constructor(dataService) {
+        this.dataService = dataService;
         this.contentContainer = mainContent;
         this.notification = new PushNotifications();
         this.menuButtons = [...utils.findPageElements('.menu-btn')];
@@ -22,14 +24,14 @@ export default class Router {
     };
 
     renderParticularPage = () => {
-        const currentMode = utils.getModeFromHash();
+        const currentMode = utils.findExistingMode(modes);
         utils.hideElement(this.contentContainer);
         switch (currentMode) {
             case 'usersTable':
             case 'userEdit':
                 this.setActiveMenuItem();
                 setTimeout(() => {
-                    utils.isAuthorized() ? modes[currentMode]() : this.redirectToAuthorization();
+                    this.dataService.appAuthorization ? modes[currentMode]() : this.redirectToAuthorization();
                 }, 300);
                 break;      
             default:
@@ -53,7 +55,7 @@ export default class Router {
       };
 
       logout = () => {
-        sessionStorage.removeItem('isAuthorized');
+        this.dataService.appAuthorization = false;
         this.goTo('');
       };
 
