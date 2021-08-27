@@ -7,7 +7,6 @@ import PageNotFound from "./pages/not-found-page.js";
 
 import DataService from "./data-service.js";
 import Router from "./router.js";
-import Popup from "./pages/popup.js";
 
 import utils from "./utils.js";
 
@@ -22,7 +21,6 @@ export default class App {
   about = null;
   pageNotFound = null;
   router = null;
-  popup = null;
 
   constructor() {
     this.dataService = new DataService();
@@ -32,7 +30,6 @@ export default class App {
     this.userForm = new UserForm(this.dataService);
     this.about = new About();
     this.pageNotFound = new PageNotFound();
-    this.popup = new Popup();
     this.router = new Router(this.dataService);
   }
 
@@ -77,7 +74,6 @@ export default class App {
 
     const userDeleteBtn = e.target.closest('.btn-delete-user');
     if(userDeleteBtn) {
-      console.log(userDeleteBtn)
       this.usersTable.handleUserDelete(userDeleteBtn.dataset.username);
     };
 

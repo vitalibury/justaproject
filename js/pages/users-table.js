@@ -60,10 +60,10 @@ export default class UsersTable {
         popupConfirm.dataset.username = '';
       };
 
-      handleBtnConfirm = (username) => {
+      handleBtnConfirm = () => {
         utils.hidePopup();
         utils.hideOverlay();
-        this.dataService.deleteUser(username);
+        this.dataService.deleteUser(popupConfirm.dataset.username);
         
         this.notification.showPushNotification(
             notificationsList.deletionSuccess,
