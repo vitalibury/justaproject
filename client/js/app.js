@@ -43,7 +43,12 @@ export default class App {
     document.addEventListener('click', this.handleClicks);
     document.addEventListener('focus', this.handleFocuses, true);
     document.addEventListener('blur', this.handleBlurs, true);
+    document.addEventListener('change', this.handleChanges);
     window.addEventListener('hashchange', this.router.renderParticularPage);
+    window.onunload = (e) => {
+      console.log(e)
+      alert('asca')
+    }
   };
   
     // EVENT HANDLERS
@@ -63,7 +68,7 @@ export default class App {
     const userEditForm = e.target.closest('.user-edit-form');
     if(userEditForm) {
       this.userForm.handleUserEditSubmit(userEditForm);
-    }
+    };
   };
 
   handleClicks = (e) => {
@@ -104,6 +109,13 @@ export default class App {
     const authInput = e.target.closest('.auth-input');
     if(authInput) {
       utils.handleInputBlur(e);
+    };
+  };
+
+  handleChanges = (e) => {
+    const avatarField = e.target.closest('.avatar-field');
+    if (avatarField) {
+      this.userForm.handleAvatarChange(avatarField);
     };
   };
 };

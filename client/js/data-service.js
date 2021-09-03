@@ -34,9 +34,7 @@ export default class DataService {
     };
 
     updateUser(userName, user) {
-        console.log(this.users[userName].interests.travels);
         this.users[userName] = user;
-        console.log(this.users[userName].interests.travels);
         this.saveUsers();
     };
 

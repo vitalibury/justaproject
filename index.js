@@ -1,5 +1,6 @@
-import App from "./js/app.js";
+import { app } from "./app.js";
 
-const app = new App();
 
-app.init();
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server has been started on ${PORT}`));

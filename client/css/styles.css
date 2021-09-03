@@ -76,6 +76,7 @@ body {
   top: 2rem;
   left: calc(50% - 15rem);
   transition: 0.5s;
+  z-index: 20;
 }
 
 .hide {
@@ -285,10 +286,41 @@ body {
   margin-bottom: 1rem;
 }
 
+.avatar-label {
+  cursor: pointer;
+}
+
+.avatar-label:hover .avatar-image {
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.89);
+}
+.avatar-label:hover .avatar-btn {
+  color: black
+}
+
+.avatar-image {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 0.8rem;
+  background-image: url("../assets/images/anonymous-user.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: 0.3s;
+}
+
+.avatar-btn {
+  text-align: center;
+  transition: 0.3s;
+}
+
+
 .user-edit-submit-btn {
   max-width: 10rem;
   align-self: center;
 }
+
+
+
 
 .advertisement {
   width: 100%;

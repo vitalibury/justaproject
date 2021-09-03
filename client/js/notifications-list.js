@@ -9,7 +9,8 @@ const notificationsList = {
     loginFailed: 'Такого пользователя не существует, зарегистрируйтесь.',
     signIn: 'Войдите в систему',
     deletionSuccess: 'Пользователь успешно удален.',
-    savingSuccess: 'Данные пользователя успешно сохранены.'
+    savingSuccess: 'Данные пользователя успешно сохранены.',
+    notSupportedFile: 'Тип файла не поддерживается. Выберите .jpg(.jpeg) или .png'
 };
 
 export default notificationsList;

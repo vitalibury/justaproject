@@ -184,8 +184,8 @@
 
 
 
-    <template id="userEditForm">
-      <form class="user-edit-form card">
+    <template id="userEditTemplate">
+      <form class="user-edit-form card" id="userEditForm">
         <h5 class="card-title">Изменение учетной записи пользователя</h5>
         <div class="form-group user-form-group">
             <label for="country"><h6>Страна:</h6></label>
@@ -244,6 +244,16 @@
             <input type="checkbox" id="languages" class="form-check-input" value="languages">
           <label for="languages" class="form-check-label">Иностранные языки</label>
         </div>
+        </div>
+      </div>
+      <div class="form-group user-form-group">
+        <h6>Аватар:</h6>
+        <label for="avatar" class="avatar-label">
+          <div class="avatar-image" id="avatarImage"></div>
+          <div class="avatar-btn">Изменить аватарку</div>
+        </label>
+        <div>
+          <input style="display: none;" class="form-control form-control-sm avatar-field" type="file" name="image" id="avatar" accept="image/jpg, image/jpeg, image/png">
         </div>
       </div>
         <button type="submit" class="btn btn-primary user-edit-submit-btn">Сохранить</button>
