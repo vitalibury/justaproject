@@ -19,23 +19,31 @@ export default class UserForm {
     this.router = new Router();
     this.notification = new PushNotifications();
     modes["userEdit"] = this.renderUserFormPage;
-  }
+  };
 
   renderUserFormPage = () => {
     utils.clearElementContent(this.contentContainer);
-    this.contentContainer.innerHTML = this.layout.innerHTML;
-    const currUser = this.dataService.getUser(utils.getRouteParameter(1));
-    this.renderUserFormContent(currUser);
+    utils.renderSpinner();
     utils.showElement(this.contentContainer);
+    this.dataService.getUserByEmail(utils.getRouteParameter(1))
+      .then(user => {
+        utils.clearElementContent(this.contentContainer);
+        this.contentContainer.innerHTML = this.layout.innerHTML;
+        this.renderUserFormContent(user);
+      })
+      .catch(e => console.log(e));
   };
 
   renderUserFormContent = (user) => {
     for (let i = 0; i <= 1; i++) {
       const valueForField = user[userEditForm.elements[i].id];
-      let formField = userEditForm.elements[i];
+      const formField = userEditForm.elements[i];
 
       if (valueForField) {
-        formField.value = valueForField;
+
+        formField.value = userEditForm.elements[i].type === 'date' ?
+          new Date(valueForField).toLocaleDateString().split('.').reverse().join('-') :
+          valueForField;
       }
     }
 
@@ -60,7 +68,9 @@ export default class UserForm {
     }
   };
 
-  updateUserObject(formElements, user) {
+  updateUserObject(formElements) {
+    const user = {};
+    user.interests = {};
     for (let i = 0; i <= 1; i++) {
       const fieldName = formElements[i].id;
       const fieldValue = formElements[i].value;
@@ -72,8 +82,6 @@ export default class UserForm {
       const fieldValue = formElements[i].checked;
       user[fieldName] = fieldValue;
     }
-
-    user.interests = user.interests ? user.interests : {};
 
     for (let i = 4; i <= 9; i++) {
       const fieldName = formElements[i].id;
@@ -103,7 +111,6 @@ export default class UserForm {
           resolve(user);
         });
       } else {
-        user.avatar = user.avatar ? user.avatar : "";
         resolve(user);
       }
     });
@@ -124,7 +131,7 @@ export default class UserForm {
 
       xhr.onerror = () => {
         reject({
-          status: this.status,
+          status: xhr.status,
           statusText: xhr.statusText,
         });
       };
@@ -134,10 +141,12 @@ export default class UserForm {
   };
 
   handleUserEditSubmit = (userForm) => {
-    const currUser = this.dataService.getUser(utils.getRouteParameter(1));
-    this.updateUserObject(userForm.elements, currUser)
+    const userEmail = utils.getRouteParameter(1);
+    this.updateUserObject(userForm.elements)
       .then((user) => {
-        this.dataService.saveUsers();
+        return this.dataService.updateUser(userEmail, user);
+      })
+      .then(() => {
         this.notification.showPushNotification(
           notificationsList.savingSuccess,
           "alert-success"
@@ -145,9 +154,7 @@ export default class UserForm {
         utils.hideElement(this.contentContainer);
         this.router.goTo("usersTable");
       })
-      .catch((e) => {
-        throw Error(e);
-      });
+      .catch((e) => console.log(e));
   };
 
   handleAvatarChange = (avatarField) => {

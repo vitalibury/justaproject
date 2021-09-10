@@ -1,12 +1,11 @@
-import modes from '../modes.js';
-import notificationsList from '../notifications-list.js';
-import PushNotifications from '../push-notification.js';
-import Router from '../router.js';
-import utils from '../utils.js';
-import { validateFormField, validateFormsEqual } from '../validation.js';
+import modes from "../modes.js";
+import notificationsList from "../notifications-list.js";
+import PushNotifications from "../push-notification.js";
+import Router from "../router.js";
+import utils from "../utils.js";
+import { validateFormField, validateFormsEqual } from "../validation.js";
 
 export default class RegistrationForm {
-
   contentContainer = null;
   layout = null;
   dataService = null;
@@ -19,7 +18,7 @@ export default class RegistrationForm {
     this.dataService = dataService;
     this.router = new Router();
     this.notification = new PushNotifications();
-    modes['registration'] = this.renderRegistrationPage;
+    modes["registration"] = this.renderRegistrationPage;
   }
 
   renderRegistrationPage = () => {
@@ -29,11 +28,13 @@ export default class RegistrationForm {
   };
 
   handleRegistrationSubmit = (registrationForm) => {
-
     const { emailField, passwordField, passwordRepeatField } = {
       emailField: utils.getFormElement(registrationForm, "email"),
       passwordField: utils.getFormElement(registrationForm, "password"),
-      passwordRepeatField: utils.getFormElement(registrationForm, "passwordRepeat"),
+      passwordRepeatField: utils.getFormElement(
+        registrationForm,
+        "passwordRepeat"
+      ),
     };
 
     if (
@@ -41,16 +42,29 @@ export default class RegistrationForm {
     ) {
       const email = emailField.value;
       const password = passwordField.value;
-      const newUser = { password: password };
-      this.dataService.createUser(email, newUser);
-      this.notification.showPushNotification(
-        notificationsList.registrationSuccess,
-        "alert-success"
-      );
-      setTimeout(() => {
-        this.router.goTo('');
-      }, 1000);
-    };
+
+      this.dataService.registration(email, password)
+        .then((user) => {
+          this.notification.showPushNotification(
+            notificationsList.registrationSuccess,
+            "alert-success"
+          );
+          setTimeout(() => {
+            this.router.goTo("");
+          }, 1000);
+        })
+        .catch((error) => {
+          console.log(error);
+          error.then((res) => {
+            if (res.status === 409) {
+              this.notification.showPushNotification(
+                res.message,
+                "alert-warning"
+              );
+            }
+          });
+        });
+    }
   };
 
   checkRegistartionForm(email, password, passwordRepeat) {
@@ -70,21 +84,19 @@ export default class RegistrationForm {
       isPasswordsEqual
     ) {
       return false;
-    };
+    }
 
-    const user = this.dataService.getUser(email.value.trim());
-    if (user) {
-      this.notification.showPushNotification(
-        notificationsList.emailAlreadyExist,
-        "alert-warning"
-      );
+    // const user = this.dataService.getUser(email.value.trim());
+    // if (user) {
+    //   this.notification.showPushNotification(
+    //     notificationsList.emailAlreadyExist,
+    //     "alert-warning"
+    //   );
 
-      return false;
+    //   return false;
 
-    };
+    // };
 
     return true;
-
-  };
-
-};
+  }
+}

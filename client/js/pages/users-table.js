@@ -1,5 +1,4 @@
 import modes from "../modes.js";
-import notificationsList from '../notifications-list.js';
 import PushNotifications from '../push-notification.js';
 import utils from "../utils.js";
 
@@ -18,34 +17,42 @@ export default class UsersTable {
     modes['usersTable'] = this.renderUsersTablePage;
     }
 
-    renderUsersTablePage = () => {
+    renderUsersTablePage = async () => {
         utils.clearElementContent(this.contentContainer);
-        this.contentContainer.innerHTML = this.layout.innerHTML;
-        this.renderTableContent(this.dataService.users);
+        utils.renderSpinner();
         utils.showElement(this.contentContainer);
+        this.dataService.getAllUsers()
+        .then(users => {
+          utils.clearElementContent(this.contentContainer);
+          utils.renderSpinner();
+          this.contentContainer.innerHTML = this.layout.innerHTML;
+          this.renderTableContent(users);
+        })
+        .catch(e => console.log(e));
     };
 
     renderTableContent(users) {
-        let currIndex = 1;
-        for (const user in users) {
-            if (users.hasOwnProperty(user)) {
-                const element = users[user];
-                const userRow = document.createElement('tr');
-                userRow.innerHTML = `
-                    <td>
-                    ${currIndex}
-                    </td>
-                    <td>
-                    ${user}
-                    </td>
-                    <td>
-                    <a href="#userEdit/${user}" class='btn btn-outline-primary btn-edit-user'>Изменить</a>
-                    <a class='btn btn-outline-danger btn-delete-user' data-username='${user}'>Удалить</a>
-                    </td>`;
-                usersTableBody.append(userRow);
-                currIndex ++;
-            };
-        };
+      users.forEach((user, ind) => {
+        const email = user.email;
+        const userRow = document.createElement('tr');
+        userRow.innerHTML = `
+            <td>
+            ${ind + 1}
+            </td>
+            <td>
+            ${email}
+            </td>
+            <td>
+            <a href="#userEdit/${email}" class='btn btn-outline-primary btn-edit-user'>Изменить</a>
+            <a class='btn btn-outline-danger btn-delete-user' data-username='${email}'>Удалить</a>
+            </td>`;
+        usersTableBody.append(userRow);
+      });
+      
+      if (!users.length) {
+        const table = document.querySelector('.users-table');
+        table.insertAdjacentHTML('afterend', '<p>Пользователи не найдены.</p>');
+      }
     };
 
     handleUserDelete = (username) => {
@@ -61,19 +68,21 @@ export default class UsersTable {
       };
 
       handleBtnConfirm = () => {
-        utils.hidePopup();
-        utils.hideOverlay();
-        this.dataService.deleteUser(popupConfirm.dataset.username);
-        
-        this.notification.showPushNotification(
-            notificationsList.deletionSuccess,
-            "alert-success"
-          );
-        popupConfirm.dataset.username = '';
-        utils.hideElement(this.contentContainer);
-        setTimeout(() => {
-            this.renderUsersTablePage();
-        }, 300);
+        this.dataService.deleteUser(popupConfirm.dataset.username)
+        .then(response => {
+            utils.hidePopup();
+            utils.hideOverlay();
+            this.notification.showPushNotification(
+                response.message,
+                "alert-success"
+              );
+            popupConfirm.dataset.username = '';
+            utils.hideElement(this.contentContainer);
+            setTimeout(() => {
+                this.renderUsersTablePage();
+            }, 300);
+          })
+          .catch(e => console.log(e));        
       };
       
 };

@@ -1,52 +1,88 @@
-import { appDBName } from "./config/app-keys.js";
+import { appDBName, serverURL } from "./config/app-keys.js";
+import utils from "./utils.js";
 
 export default class DataService {
+  users = null;
+  DBName = appDBName;
 
-    users = null;
-    DBName = appDBName;
-
-    constructor() {
-        if (localStorage.getItem(this.DBName)) {
-            const jsonUsers = localStorage.getItem(this.DBName);
-            this.users = JSON.parse(jsonUsers);
-        } else {
-            this.users = {};
-            this.saveUsers();
-        };
+  constructor() {
+    if (localStorage.getItem(this.DBName)) {
+      const jsonUsers = localStorage.getItem(this.DBName);
+      this.users = JSON.parse(jsonUsers);
+    } else {
+      this.users = {};
+      this.saveUsers();
     }
+  }
 
-    saveUsers() {
-        localStorage.setItem(this.DBName, JSON.stringify(this.users));
-    };
+  async login(email, password) {
+    const user = { email, password };
+    let response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    return utils.handleResponse(response);
+  };
 
-    getUser = (email) => {
-        return this.users[email];
-    };
+  async registration(email, password) {
+    const user = { email, password };
+    let response = await fetch("/api/auth/registration", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    return utils.handleResponse(response);
+  };
 
-    createUser(email, user) {
-        this.users[email] = user;
-        this.saveUsers();
-    };
+  async getAllUsers() {
+    let response = await fetch('/api/users/', {
+      method: "GET"
+    });
+    return utils.handleResponse(response);
+  };
 
-    deleteUser(email) {
-        delete this.users[email];
-        this.saveUsers();
-    };
+  async getUserByEmail(email) {
+    let response = await fetch(`/api/users/${email}`, {
+      method: "GET",
+    });
+    return utils.handleResponse(response);
+  };
 
-    updateUser(userName, user) {
-        this.users[userName] = user;
-        this.saveUsers();
-    };
+  async updateUser(email, user) {
+    let response = await fetch(`api/users/${email}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user)
+    });
+    return utils.handleResponse(response);
+  };
 
-    get appAuthorization() {
-        return sessionStorage.getItem('isSoftGram_Authorized');
-    };
+  async deleteUser(email) {
+    let response = await fetch(`/api/users/${email}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    return utils.handleResponse(response);
+  };
 
-    set appAuthorization(value) {
-        if(value === false) {
-            sessionStorage.removeItem('isSoftGram_Authorized');
-        } else {
-            sessionStorage.setItem('isSoftGram_Authorized', value);
-        };
-    };
-};
+  get appAuthorization() {
+    return sessionStorage.getItem("isSoftGram_Authorized");
+  };
+
+  set appAuthorization(value) {
+    if (value === false) {
+      sessionStorage.removeItem("isSoftGram_Authorized");
+    } else {
+      sessionStorage.setItem("isSoftGram_Authorized", value);
+    }
+  };
+}

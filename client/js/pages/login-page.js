@@ -1,13 +1,10 @@
-import modes from '../modes.js';
-import Router from '../router.js';
-import utils from '../utils.js';
-import notificationsList from '../notifications-list.js';
-import PushNotifications from '../push-notification.js';
-import { validateFormField } from '../validation.js';
-
+import modes from "../modes.js";
+import Router from "../router.js";
+import utils from "../utils.js";
+import PushNotifications from "../push-notification.js";
+import { validateFormField } from "../validation.js";
 
 export default class LoginForm {
-
   contentContainer = null;
   layout = null;
   dataService = null;
@@ -20,8 +17,8 @@ export default class LoginForm {
     this.dataService = dataService;
     this.router = new Router();
     this.notification = new PushNotifications();
-    modes[''] = this.renderLoginPage;
-  };
+    modes[""] = this.renderLoginPage;
+  }
 
   renderLoginPage = () => {
     utils.clearElementContent(this.contentContainer);
@@ -30,16 +27,32 @@ export default class LoginForm {
   };
 
   handleLoginSubmit = (loginForm) => {
-
     const { emailField, passwordField } = {
       emailField: utils.getFormElement(loginForm, "email"),
       passwordField: utils.getFormElement(loginForm, "password"),
     };
 
     if (this.checkLoginForm(emailField, passwordField)) {
-      this.dataService.appAuthorization = true;
-      this.router.goTo('usersTable');
-    };
+      const email = emailField.value;
+      const password = passwordField.value;
+
+      this.dataService
+        .login(email, password)
+        .then((obj) => {
+          this.dataService.appAuthorization = obj.accessConfirmed;
+          this.router.goTo('usersTable');
+        })
+        .catch((error) => {
+          error.then((res) => {
+            if (res.status === 404) {
+              this.notification.showPushNotification(
+                res.message, 
+                "alert-danger"
+              );
+            }
+          });
+        });
+    }
   };
 
   checkLoginForm(email, password) {
@@ -51,29 +64,8 @@ export default class LoginForm {
 
     if (isValidEmail || isValidPassword) {
       return false;
-    };
-
-    const user = this.dataService.getUser(email.value.trim());
-    if (!user) {
-      this.notification.showPushNotification(
-        notificationsList.emailNotExist,
-        "alert-danger"
-      );
-      return false;
-    };
-
-    if (!(user.password === password.value.trim())) {
-      this.notification.showPushNotification(
-        notificationsList.passwordIncorrect,
-        "alert-danger"
-      );
-
-      return false;
-
-    };
+    }
 
     return true;
-
-  };
-
-};
+  }
+}
