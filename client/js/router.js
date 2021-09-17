@@ -29,6 +29,8 @@ export default class Router {
         switch (currentMode) {
             case 'usersTable':
             case 'userEdit':
+            case 'userPosts':
+            case 'newPost':
                 this.setActiveMenuItem();
                 setTimeout(() => {
                     this.dataService.appAuthorization ? modes[currentMode]() : this.redirectToAuthorization();

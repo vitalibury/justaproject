@@ -74,6 +74,55 @@ export default class DataService {
     return utils.handleResponse(response);
   };
 
+  async getUserPosts(email) {
+    let response = await fetch(`/api/posts/${email}`, {
+      method: "GET"
+    });
+    return utils.handleResponse(response);
+  };
+
+  async createPost(email, post) {
+    let response = await fetch(`/api/posts/${email}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(post)
+    });
+    return utils.handleResponse(response);
+  };
+
+  async deletePost(id) {
+    let response = await fetch(`/api/posts/${id}`, {
+      method: "DELETE"
+    });
+    return utils.handleResponse(response);
+  };
+
+  sendImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("image", file);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", `${serverURL}/uploads`);
+
+      xhr.onload = () => {
+        if (xhr.status === 201) {
+          resolve(xhr.response);
+        }
+      };
+
+      xhr.onerror = () => {
+        reject({
+          status: xhr.status,
+          statusText: xhr.statusText,
+        });
+      };
+
+      xhr.send(formData);
+    });
+  };
+
   get appAuthorization() {
     return sessionStorage.getItem("isSoftGram_Authorized");
   };

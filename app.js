@@ -6,7 +6,8 @@ import cors from "cors";
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
-import { mongo_URI } from "./client/js/config/app-keys.js";
+import postsRoutes from "./routes/post.js";
+import { mongo_URI } from "./config/keys.js";
 
 mongoose.connect(mongo_URI, {
   useUnifiedTopology: true,
@@ -34,6 +35,7 @@ app.use('/', express.static('client'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/posts', postsRoutes);
 
 
 app.use(upload.single('image'));

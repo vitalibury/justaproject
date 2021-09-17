@@ -10,7 +10,8 @@ const notificationsList = {
     signIn: 'Войдите в систему',
     deletionSuccess: 'Пользователь успешно удален.',
     savingSuccess: 'Данные пользователя успешно сохранены.',
-    notSupportedFile: 'Тип файла не поддерживается. Выберите .jpg(.jpeg) или .png'
+    notSupportedFile: 'Тип файла не поддерживается. Выберите .jpg(.jpeg) или .png',
+    postCreatingSuccess: 'Пост успешно добавлен.'
 };
 
 export default notificationsList;

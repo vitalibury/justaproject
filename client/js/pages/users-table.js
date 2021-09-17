@@ -19,12 +19,11 @@ export default class UsersTable {
 
     renderUsersTablePage = async () => {
         utils.clearElementContent(this.contentContainer);
-        utils.renderSpinner();
+        utils.renderSpinner(this.contentContainer);
         utils.showElement(this.contentContainer);
         this.dataService.getAllUsers()
         .then(users => {
           utils.clearElementContent(this.contentContainer);
-          utils.renderSpinner();
           this.contentContainer.innerHTML = this.layout.innerHTML;
           this.renderTableContent(users);
         })
@@ -42,7 +41,8 @@ export default class UsersTable {
             <td>
             ${email}
             </td>
-            <td>
+            <td class="user-controls">
+            <a href="#userPosts/${email}" class='btn btn-outline-primary btn-user-posts'>Посты</a>
             <a href="#userEdit/${email}" class='btn btn-outline-primary btn-edit-user'>Изменить</a>
             <a class='btn btn-outline-danger btn-delete-user' data-username='${email}'>Удалить</a>
             </td>`;
@@ -61,14 +61,8 @@ export default class UsersTable {
         popupConfirm.dataset.username = username;
       };
 
-      handleBtnCancel = () => {
-        utils.hidePopup();
-        utils.hideOverlay();
-        popupConfirm.dataset.username = '';
-      };
-
-      handleBtnConfirm = () => {
-        this.dataService.deleteUser(popupConfirm.dataset.username)
+      handleBtnConfirm = (email) => {
+        this.dataService.deleteUser(email)
         .then(response => {
             utils.hidePopup();
             utils.hideOverlay();

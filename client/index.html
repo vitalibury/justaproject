@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/images/issoft_icon.png" type="image/png">
     <link rel="stylesheet" href="./css/styles.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -48,6 +49,7 @@
     
     <div class="overlay hide-overlay" id="overlay"></div>
     
+
 
 
     <template id="loginForm">
@@ -95,7 +97,6 @@
         </div>
       </form>
     </template>
-
 
 
 
@@ -164,7 +165,6 @@
 
 
 
-
     <template id="usersTable">
       <h4>Зарегистрированные пользователи</h4>
       <table class="users-table" id="table">
@@ -180,7 +180,6 @@
         </tbody>
       </table>
     </template>
-
 
 
 
@@ -249,16 +248,60 @@
       <div class="form-group user-form-group">
         <h6>Аватар:</h6>
         <label for="avatar" class="avatar-label">
-          <div class="avatar-image" id="avatarImage"></div>
+          <div class="avatar-image" id="imagePreview"></div>
           <div class="avatar-btn">Изменить аватарку</div>
         </label>
         <div>
-          <input style="display: none;" class="form-control form-control-sm avatar-field" type="file" name="image" id="avatar" accept="image/jpg, image/jpeg, image/png">
+          <input style="display: none;" class="form-control form-control-sm avatar-field image-input-field" type="file" name="image" id="avatar" accept="image/jpg, image/jpeg, image/png">
         </div>
       </div>
         <button type="submit" class="btn btn-primary user-edit-submit-btn">Сохранить</button>
       </form>
     </template>
+
+
+
+    <template id="userPostsTemplate">
+      <div class="user-posts-page">
+        <div class="post-header">
+          <h4>Загруженные посты</h4>
+          <a class="btn btn-primary new-post-btn">Загрузить пост</a>
+        </div>
+        <div class="posts-container" id="userPostsContainer"></div>
+      </div>
+    </template>
+
+
+
+    <template id="newPostFormTemplate">
+      <form class="new-post-form card" id="newPostForm">
+        <h5 class="card-title">Создание нового поста</h5>
+
+        <div class="card-body">
+        <div class="form-group user-form-group">
+        <label for="newPostImageInput" class="new-post-image-label">
+          <div class="new-post-image" id="imagePreview"></div>
+          <div class="new-post-image-btn">Выбрать фотографию</div>
+        </label>
+        <div>
+          <input style="display: none;" class="form-control form-control-sm new-post-image-field image-input-field" type="file" name="newPostImage" id="newPostImageInput" accept="image/jpg, image/jpeg, image/png">
+        </div>
+        </div>
+        <div class="form-group user-form-group">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="post-title" placeholder="Название поста" aria-label="Username" aria-describedby="basic-addon1" required>
+          </div>
+        </div>
+        <div class="form-group user-form-group">
+          <div class="input-group">
+            <textarea class="form-control" id="post-description" aria-label="With textarea" placeholder="Описание поста" rows="4" style="resize: none;"></textarea>
+          </div>
+        </div>        
+      </div>
+        <button type="submit" class="btn btn-primary user-edit-submit-btn">Добавить</button>
+      </form>
+    </template>
+
 
 
     <template id="about">
@@ -277,6 +320,7 @@
         </div>
       </section>
     </template>
+
 
 
     <template id="pageNotFound">

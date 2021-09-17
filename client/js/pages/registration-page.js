@@ -43,8 +43,9 @@ export default class RegistrationForm {
       const email = emailField.value;
       const password = passwordField.value;
 
-      this.dataService.registration(email, password)
-        .then((user) => {
+      this.dataService
+        .registration(email, password)
+        .then(() => {
           this.notification.showPushNotification(
             notificationsList.registrationSuccess,
             "alert-success"
@@ -54,15 +55,14 @@ export default class RegistrationForm {
           }, 1000);
         })
         .catch((error) => {
-          console.log(error);
-          error.then((res) => {
-            if (res.status === 409) {
-              this.notification.showPushNotification(
-                res.message,
-                "alert-warning"
-              );
-            }
-          });
+          if (error.status === 409) {
+            this.notification.showPushNotification(
+              error.message,
+              "alert-warning"
+            );
+          } else {
+            console.log(error);
+          }
         });
     }
   };
@@ -85,17 +85,6 @@ export default class RegistrationForm {
     ) {
       return false;
     }
-
-    // const user = this.dataService.getUser(email.value.trim());
-    // if (user) {
-    //   this.notification.showPushNotification(
-    //     notificationsList.emailAlreadyExist,
-    //     "alert-warning"
-    //   );
-
-    //   return false;
-
-    // };
 
     return true;
   }

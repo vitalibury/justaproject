@@ -23,7 +23,7 @@ export default class UserForm {
 
   renderUserFormPage = () => {
     utils.clearElementContent(this.contentContainer);
-    utils.renderSpinner();
+    utils.renderSpinner(this.contentContainer);
     utils.showElement(this.contentContainer);
     this.dataService.getUserByEmail(utils.getRouteParameter(1))
       .then(user => {
@@ -64,7 +64,7 @@ export default class UserForm {
 
     const userAvatarPath = user[userEditForm.elements[10].id];
     if (userAvatarPath) {
-      avatarImage.style.backgroundImage = `url('${userAvatarPath}')`;
+      imagePreview.style.backgroundImage = `url('${serverURL}${userAvatarPath}')`;
     }
   };
 
@@ -104,39 +104,13 @@ export default class UserForm {
           return;
         }
 
-        this.sendImage(file).then((path) => {
-          user.avatar = `${serverURL}/${JSON.parse(path)
-            .split("\\")
-            .join("/")}`;
+        this.dataService.sendImage(file).then((path) => {
+          user.avatar = utils.transformImagePath(path);
           resolve(user);
         });
       } else {
         resolve(user);
       }
-    });
-  }
-
-  sendImage = (file) => {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append("image", file);
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", `${serverURL}/uploads`);
-
-      xhr.onload = () => {
-        if (xhr.status === 201) {
-          resolve(xhr.response);
-        }
-      };
-
-      xhr.onerror = () => {
-        reject({
-          status: xhr.status,
-          statusText: xhr.statusText,
-        });
-      };
-
-      xhr.send(formData);
     });
   };
 
@@ -155,12 +129,5 @@ export default class UserForm {
         this.router.goTo("usersTable");
       })
       .catch((e) => console.log(e));
-  };
-
-  handleAvatarChange = (avatarField) => {
-    const [file] = avatarField.files;
-    if (file) {
-      avatarImage.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
-    }
   };
 }

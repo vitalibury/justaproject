@@ -72,6 +72,13 @@ const utils = {
     popup.classList.add("hide-popup");
   },
 
+  handleBtnCancel() {
+    this.hidePopup();
+    this.hideOverlay();
+    popupConfirm.dataset.username = '';
+    popupConfirm.dataset.postId = '';
+  },
+
   clearRouteHash() {
     return window.location.hash.split("").splice(1).join("");
   },
@@ -93,17 +100,29 @@ const utils = {
   },
 
   handleResponse(response) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      let data = await response.json();
       if (response.ok) {
-        resolve(response.json());
+        resolve(data);
       } else {
-        reject(response.json());
+        reject(data);
       }
     });
   },
 
-  renderSpinner() {
-    mainContent.innerHTML = `
+  handleImageChange(imageField) {
+    const [file] = imageField.files;
+    if (file) {
+      imagePreview.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+    }
+  },
+
+  transformImagePath(path) {
+    return `/${JSON.parse(path).split("\\").join("/")}`;
+  },
+
+  renderSpinner(target) {
+    target.innerHTML = `
     <div class="spinner-border text-info" style="width: 4rem; height: 4rem; border-width: 0.5rem;" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>

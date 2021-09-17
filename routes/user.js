@@ -8,4 +8,4 @@ router.get('/:email', getUserByEmail);
 router.post('/:email', updateUser);
 router.delete('/:email', removeUser);
 
-  export default router;
+export default router;
