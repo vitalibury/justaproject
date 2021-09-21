@@ -46,15 +46,15 @@ export default class DataService {
     return utils.handleResponse(response);
   };
 
-  async getUserByEmail(email) {
-    let response = await fetch(`/api/users/${email}`, {
+  async getUserById(id) {
+    let response = await fetch(`/api/users/${id}`, {
       method: "GET",
     });
     return utils.handleResponse(response);
   };
 
-  async updateUser(email, user) {
-    let response = await fetch(`api/users/${email}`, {
+  async updateUser(id, user) {
+    let response = await fetch(`api/users/${id}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -64,8 +64,8 @@ export default class DataService {
     return utils.handleResponse(response);
   };
 
-  async deleteUser(email) {
-    let response = await fetch(`/api/users/${email}`, {
+  async deleteUser(id) {
+    let response = await fetch(`/api/users/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -74,15 +74,22 @@ export default class DataService {
     return utils.handleResponse(response);
   };
 
-  async getUserPosts(email) {
-    let response = await fetch(`/api/posts/${email}`, {
+  async getAllPosts() {
+    let response = await fetch(`/api/posts`, {
       method: "GET"
     });
     return utils.handleResponse(response);
   };
 
-  async createPost(email, post) {
-    let response = await fetch(`/api/posts/${email}`, {
+  async getUserPosts(id) {
+    let response = await fetch(`/api/posts/${id}`, {
+      method: "GET"
+    });
+    return utils.handleResponse(response);
+  };
+
+  async createPost(id, post) {
+    let response = await fetch(`/api/posts/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -3,7 +3,8 @@ import RegistrationForm from "./pages/registration-page.js";
 import UsersTable from "./pages/users-table.js";
 import UserForm from "./pages/user-form.js";
 import About from "./pages/about-page.js";
-import UserPosts from "./pages/posts-page.js";
+import AllPosts from "./pages/all-posts-page.js";
+import UserPosts from "./pages/user-posts-page.js";
 import NewPost from "./pages/new-post-page.js";
 import PageNotFound from "./pages/not-found-page.js";
 
@@ -13,13 +14,13 @@ import Router from "./router.js";
 import utils from "./utils.js";
 
 
-
 export default class App {
   dataService = null;
   login = null;
   registration = null;
   usersTable = null;
   userForm = null;
+  posts = null;
   userPosts = null;
   newPost = null;
   about = null;
@@ -28,15 +29,16 @@ export default class App {
 
   constructor() {
     this.dataService = new DataService();
-    this.login = new LoginForm(this.dataService);
-    this.registration = new RegistrationForm(this.dataService);
-    this.usersTable = new UsersTable(this.dataService);
-    this.userForm = new UserForm(this.dataService);
-    this.userPosts = new UserPosts(this.dataService);
-    this.newPost = new NewPost(this.dataService);
+    this.login = new LoginForm();
+    this.registration = new RegistrationForm();
+    this.usersTable = new UsersTable();
+    this.userForm = new UserForm();
+    this.posts = new AllPosts();
+    this.userPosts = new UserPosts();
+    this.newPost = new NewPost();
     this.about = new About();
     this.pageNotFound = new PageNotFound();
-    this.router = new Router(this.dataService);
+    this.router = new Router();
   }
 
   init() {
@@ -96,7 +98,7 @@ export default class App {
 
     const popupConfirmBtn = e.target.closest('.btn-popup-confirm');
     if(popupConfirmBtn) {
-      popupConfirmBtn.dataset.username ? this.usersTable.handleBtnConfirm(popupConfirmBtn.dataset.username) : null;
+      popupConfirmBtn.dataset.userId ? this.usersTable.handleBtnConfirm(popupConfirmBtn.dataset.userId) : null;
       popupConfirmBtn.dataset.postId ? this.userPosts.handleBtnConfirm(popupConfirmBtn.dataset.postId) : null;
     };
 

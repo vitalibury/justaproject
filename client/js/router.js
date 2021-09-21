@@ -1,6 +1,7 @@
-import modes from "./modes.js";
-import notificationsList from "./notifications-list.js";
+import DataService from "./data-service.js";
 import PushNotifications from "./push-notification.js";
+import notificationsList from "./notifications-list.js";
+import modes from "./modes.js";
 import utils from "./utils.js";
 
 
@@ -12,9 +13,9 @@ export default class Router {
     contentContainer = null;
     menuButtons = [];
 
-    constructor(dataService) {
-        this.dataService = dataService;
+    constructor() {
         this.contentContainer = mainContent;
+        this.dataService = new DataService();
         this.notification = new PushNotifications();
         this.menuButtons = [...utils.findPageElements('.menu-btn')];
     }

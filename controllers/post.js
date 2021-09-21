@@ -1,8 +1,17 @@
 import Post from "../models/Post.js";
 import errorHandler from "../utils/errorHandler.js";
 
+export const getAllPosts = async (req, res) => {
+  const posts = await Post.find().populate('user');
+  try {
+    res.status(200).json(posts);
+  } catch (err) {
+    errorHandler(err);
+  }
+}
+
 export const getUserPosts = async (req, res) => {
-  const posts = await Post.find({email: req.params.email});
+  const posts = await Post.find({user: req.params.id});
   try {
     res.status(200).json(posts);
   } catch (err) {
@@ -10,12 +19,12 @@ export const getUserPosts = async (req, res) => {
   }
 };
 
-export const createPost = async (req, res) => {  
+export const createPost = async (req, res) => {
   const post = await new Post({
     title: req.body.title,
     description: req.body.description,
     imageSrc: req.body.imageSrc,
-    email: req.params.email
+    user: req.params.id
   });
   try {
   await post.save();

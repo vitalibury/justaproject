@@ -98,7 +98,7 @@ body {
   flex-direction: row;
   justify-content: space-between;
   /* flex-grow: 1; */
-  align-items: center;
+  align-items: stretch;
   transition: 0.3s;
 }
 
@@ -109,6 +109,7 @@ body {
 .col-navigation {
   min-width: 20rem;
   max-width: 18rem;
+  align-self: center;
 }
 
 .col-content {
@@ -116,6 +117,7 @@ body {
   padding: 0.5rem 0.5rem 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
 }
@@ -238,7 +240,7 @@ body {
 
 .user-posts-page {
   width: 100%;
-  min-height: 51rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -251,8 +253,9 @@ body {
 }
 
 .posts-container {
-  height: 47rem;
+  height: 100%;
   width: 100%;
+  max-height: 51rem;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -265,20 +268,27 @@ body {
   width: 10px;
 }
 
-.posts-container::-webkit-scrollbar-track {
+/* .posts-container::-webkit-scrollbar-track {
   -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
   background-color: #f9f9fd;
   border-radius: 10px;
-}
+} */
 
 .posts-container::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: linear-gradient(180deg, #00000017, #0000001a);
+  background: linear-gradient(180deg, #0089ff14, #00649e12);
 }
 
 .posts-container .card {
   width: 18rem;
 }
+/* .col-content .card {
+  width: 18rem;
+} */
+
+/* .user-edit-form.card {
+  width: 27rem;
+} */
 
 .card-bottom-section {
    display: flex;
@@ -299,6 +309,12 @@ body {
 
 .col-content .new-post-form {
   min-width: 25rem;
+}
+
+
+
+.about-page {
+  align-self: center;
 }
 
 

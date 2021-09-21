@@ -1,9 +1,10 @@
-import { serverURL } from "../config/app-keys.js";
-import modes from "../modes.js";
-import notificationsList from "../notifications-list.js";
+import DataService from "../data-service.js";
 import PushNotifications from "../push-notification.js";
 import Router from "../router.js";
+import notificationsList from "../notifications-list.js";
+import modes from "../modes.js";
 import utils from "../utils.js";
+import { serverURL } from "../config/app-keys.js";
 
 export default class UserForm {
   dataService = null;
@@ -12,10 +13,10 @@ export default class UserForm {
   router = null;
   notification = null;
 
-  constructor(dataService) {
-    this.dataService = dataService;
+  constructor() {
     this.layout = userEditTemplate;
     this.contentContainer = mainContent;
+    this.dataService = new DataService();
     this.router = new Router();
     this.notification = new PushNotifications();
     modes["userEdit"] = this.renderUserFormPage;
@@ -25,7 +26,7 @@ export default class UserForm {
     utils.clearElementContent(this.contentContainer);
     utils.renderSpinner(this.contentContainer);
     utils.showElement(this.contentContainer);
-    this.dataService.getUserByEmail(utils.getRouteParameter(1))
+    this.dataService.getUserById(utils.getRouteParameter(1))
       .then(user => {
         utils.clearElementContent(this.contentContainer);
         this.contentContainer.innerHTML = this.layout.innerHTML;
@@ -115,10 +116,10 @@ export default class UserForm {
   };
 
   handleUserEditSubmit = (userForm) => {
-    const userEmail = utils.getRouteParameter(1);
+    const userId = utils.getRouteParameter(1);
     this.updateUserObject(userForm.elements)
       .then((user) => {
-        return this.dataService.updateUser(userEmail, user);
+        return this.dataService.updateUser(userId, user);
       })
       .then(() => {
         this.notification.showPushNotification(

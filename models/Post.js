@@ -20,9 +20,9 @@ const postSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  email: {
-    required: true,
-    type: String
+  user: {
+    ref: 'users',
+    type: Schema.Types.ObjectId
   }
 });
 

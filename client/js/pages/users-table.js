@@ -1,5 +1,6 @@
-import modes from "../modes.js";
 import PushNotifications from '../push-notification.js';
+import DataService from '../data-service.js';
+import modes from "../modes.js";
 import utils from "../utils.js";
 
 export default class UsersTable {
@@ -9,10 +10,10 @@ export default class UsersTable {
   dataService = null;
   notification = null;
 
-    constructor(dataService) {
+    constructor() {
     this.contentContainer = mainContent;
     this.layout = usersTable;
-    this.dataService = dataService;
+    this.dataService = new DataService();
     this.notification = new PushNotifications();
     modes['usersTable'] = this.renderUsersTablePage;
     }
@@ -33,6 +34,7 @@ export default class UsersTable {
     renderTableContent(users) {
       users.forEach((user, ind) => {
         const email = user.email;
+        const id = user._id;
         const userRow = document.createElement('tr');
         userRow.innerHTML = `
             <td>
@@ -42,9 +44,9 @@ export default class UsersTable {
             ${email}
             </td>
             <td class="user-controls">
-            <a href="#userPosts/${email}" class='btn btn-outline-primary btn-user-posts'>Посты</a>
-            <a href="#userEdit/${email}" class='btn btn-outline-primary btn-edit-user'>Изменить</a>
-            <a class='btn btn-outline-danger btn-delete-user' data-username='${email}'>Удалить</a>
+            <a href="#userPosts/${id}" class='btn btn-outline-primary btn-user-posts'>Посты</a>
+            <a href="#userEdit/${id}" class='btn btn-outline-primary btn-edit-user'>Изменить</a>
+            <a class='btn btn-outline-danger btn-delete-user' data-username='${id}'>Удалить</a>
             </td>`;
         usersTableBody.append(userRow);
       });
@@ -55,14 +57,14 @@ export default class UsersTable {
       }
     };
 
-    handleUserDelete = (username) => {
+    handleUserDelete = (id) => {
         utils.showOverlay();
         utils.showPopup();
-        popupConfirm.dataset.username = username;
+        popupConfirm.dataset.userId = id;
       };
 
-      handleBtnConfirm = (email) => {
-        this.dataService.deleteUser(email)
+      handleBtnConfirm = (id) => {
+        this.dataService.deleteUser(id)
         .then(response => {
             utils.hidePopup();
             utils.hideOverlay();
@@ -70,7 +72,7 @@ export default class UsersTable {
                 response.message,
                 "alert-success"
               );
-            popupConfirm.dataset.username = '';
+            popupConfirm.dataset.userId = '';
             utils.hideElement(this.contentContainer);
             setTimeout(() => {
                 this.renderUsersTablePage();

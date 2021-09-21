@@ -1,9 +1,10 @@
-import modes from "../modes.js";
-import notificationsList from "../notifications-list.js";
+import DataService from "../data-service.js";
 import PushNotifications from "../push-notification.js";
 import Router from "../router.js";
-import utils from "../utils.js";
 import { validateFormField, validateFormsEqual } from "../validation.js";
+import notificationsList from "../notifications-list.js";
+import modes from "../modes.js";
+import utils from "../utils.js";
 
 export default class RegistrationForm {
   contentContainer = null;
@@ -12,10 +13,10 @@ export default class RegistrationForm {
   router = null;
   notification = null;
 
-  constructor(dataService) {
+  constructor() {
     this.contentContainer = mainContent;
     this.layout = registrationForm;
-    this.dataService = dataService;
+    this.dataService = new DataService();
     this.router = new Router();
     this.notification = new PushNotifications();
     modes["registration"] = this.renderRegistrationPage;

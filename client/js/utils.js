@@ -75,7 +75,7 @@ const utils = {
   handleBtnCancel() {
     this.hidePopup();
     this.hideOverlay();
-    popupConfirm.dataset.username = '';
+    popupConfirm.dataset.userId = '';
     popupConfirm.dataset.postId = '';
   },
 

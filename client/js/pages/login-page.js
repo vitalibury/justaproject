@@ -3,6 +3,7 @@ import Router from "../router.js";
 import utils from "../utils.js";
 import PushNotifications from "../push-notification.js";
 import { validateFormField } from "../validation.js";
+import DataService from "../data-service.js";
 
 export default class LoginForm {
   contentContainer = null;
@@ -11,10 +12,10 @@ export default class LoginForm {
   router = null;
   notification = null;
 
-  constructor(dataService) {
+  constructor() {
     this.contentContainer = mainContent;
     this.layout = loginForm;
-    this.dataService = dataService;
+    this.dataService = new DataService();
     this.router = new Router();
     this.notification = new PushNotifications();
     modes[""] = this.renderLoginPage;

@@ -10,8 +10,8 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getUserByEmail = async (req, res) => {
-  const user = await User.findOne({email: req.params.email});
+export const getUserById = async (req, res) => {
+  const user = await User.findById({_id: req.params.id});
   try {
     res.status(200).json(user);
   } catch(e) {
@@ -20,8 +20,8 @@ export const getUserByEmail = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const user = await User.findOneAndUpdate(
-    {email: req.params.email},
+  const user = await User.findByIdAndUpdate(
+    {_id: req.params.id},
     {$set: req.body},
     {new: true}
     );
@@ -34,7 +34,7 @@ export const updateUser = async (req, res) => {
 
 export const removeUser = async (req, res) => {
   try {
-    await User.deleteOne({email: req.params.email});
+    await User.findByIdAndDelete({_id: req.params.id});
     res.status(200).json({
       message: 'User has been deleted successfully.'
     })

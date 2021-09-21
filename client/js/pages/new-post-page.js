@@ -1,6 +1,7 @@
+import DataService from "../data-service.js";
 import Router from "../router.js";
-import notificationsList from "../notifications-list.js";
 import PushNotifications from "../push-notification.js";
+import notificationsList from "../notifications-list.js";
 import modes from "../modes.js";
 import utils from "../utils.js";
 
@@ -12,10 +13,10 @@ export default class NewPost {
   router = null;
   notification = null;
 
-  constructor(dataService) {
-    this.dataService = dataService;
+  constructor() {
     this.layout = newPostFormTemplate;
     this.contentContainer = mainContent;
+    this.dataService = new DataService();
     this.router = new Router();
     this.notification = new PushNotifications();
     modes['newPost'] = this.renderNewPostPage;
@@ -28,12 +29,11 @@ export default class NewPost {
   };
 
   handleNewPostSubmit = (postForm) => {
-    const userEmail = utils.getRouteParameter(1);
-    this.getFormValues(postForm);
+    const userId = utils.getRouteParameter(1);
     this.dataService.sendImage(this.getPostFormFile(postForm))
       .then(path => {
         const post = {...this.getFormValues(postForm), imageSrc: utils.transformImagePath(path)}
-        return this.dataService.createPost(userEmail, post);
+        return this.dataService.createPost(userId, post);
       })
       .then(() => {
         this.notification.showPushNotification(
@@ -41,7 +41,7 @@ export default class NewPost {
           "alert-success"
         );
         utils.hideElement(this.contentContainer);
-        this.router.goTo(`userPosts/${userEmail}`);
+        this.router.goTo(`userPosts/${userId}`);
       })
       .catch(e => console.log(e));
   };
