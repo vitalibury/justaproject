@@ -264,7 +264,7 @@
 
     <template id="userPostsTemplate">
       <div class="user-posts-page">
-        <div class="post-header">
+        <div class="user-posts-header">
           <h4>Загруженные посты</h4>
           <a class="btn btn-primary new-post-btn">Загрузить пост</a>
         </div>
@@ -301,6 +301,13 @@
       </div>
         <button type="submit" class="btn btn-primary user-edit-submit-btn">Добавить</button>
       </form>
+    </template>
+    
+    <template id="commentField">
+      <!-- <form class="comment-field-form"> -->
+        <textarea class="comment-field" rows="3" cols="0" autofocus required placeholder="Введите комметарий..."></textarea>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      <!-- </form> -->
     </template>
 
 

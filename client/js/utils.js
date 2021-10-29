@@ -129,6 +129,30 @@ const utils = {
     <div>Загружаю данные...</div>
     `;
   },
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+  },
+
+  convertDate(date) {
+    return new Date(date).toLocaleDateString();
+  },
+
+  createCommentObject(postId, comment, answerCommentObject) {
+    const commentObject = {post: postId, content: comment}
+    if (answerCommentObject) {
+      Object.assign(commentObject, answerCommentObject);
+      commentObject.level ++;
+      commentObject.content = comment.split(',').slice(1).join(',').trim();
+    }
+    return commentObject;
+  }
 };
 
 export default utils;

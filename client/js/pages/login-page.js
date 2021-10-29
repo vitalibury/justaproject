@@ -39,8 +39,8 @@ export default class LoginForm {
 
       this.dataService
         .login(email, password)
-        .then((obj) => {
-          this.dataService.appAuthorization = obj.accessConfirmed;
+        .then((user) => {
+          this.dataService.appAuthorization = user._id;
           this.router.goTo('usersTable');
         })
         .catch((error) => {

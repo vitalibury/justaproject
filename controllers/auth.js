@@ -30,7 +30,7 @@ export const login = async (req, res) => {
 
   if (candidate) {
     candidate.password === req.body.password
-      ? res.status(200).json({ accessConfirmed: true })
+      ? res.status(200).json(candidate)
       : res.status(401).json({
           message: "Invalid password. Enter correct please.",
         });

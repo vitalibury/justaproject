@@ -12,7 +12,6 @@ export default class UserPosts {
   contentContainer = null;
   postsContainer = null;
   layout = null;
-  postsContainer = null;
   router = null;
   notification = null;
 

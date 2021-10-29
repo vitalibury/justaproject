@@ -74,15 +74,50 @@ export default class DataService {
     return utils.handleResponse(response);
   };
 
-  async getAllPosts() {
-    let response = await fetch(`/api/posts`, {
+  async getPostWithComments(id) {
+    let response = await fetch(`/api/posts/${id}/comments/${this.appAuthorization}`, {
+      method: "GET"
+    });
+    return utils.handleResponse(response);
+  };
+
+  async getPostComments(id) {
+    let response = await fetch(`/api/posts/${id}/comments/`, {
+      method: "GET"
+    });
+    return utils.handleResponse(response);
+  };
+
+  async createPostComment(commentObject) {
+    const currentUserId = this.appAuthorization;
+    commentObject.userId = currentUserId;    
+    // const newComment = {userId, content: comment};
+    let response = await fetch(`/api/posts/${commentObject.post}/comments/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentObject)
+    });
+    return utils.handleResponse(response);
+  };
+
+  async deletePostComment(id) {
+    let response = await fetch(`/api/posts/${id}/comments/`, {
+      method: "DELETE"
+    });
+    return utils.handleResponse(response);
+  };
+
+  async getAllPosts(id) {
+    let response = await fetch(`/api/posts/${id}`, {
       method: "GET"
     });
     return utils.handleResponse(response);
   };
 
   async getUserPosts(id) {
-    let response = await fetch(`/api/posts/${id}`, {
+    let response = await fetch(`/api/posts/user/${id}`, {
       method: "GET"
     });
     return utils.handleResponse(response);
@@ -105,6 +140,17 @@ export default class DataService {
     });
     return utils.handleResponse(response);
   };
+
+  async changePostRate(id, userId) {
+    let response = await fetch(`api/posts/rate/${id}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({userId})
+    });
+    return utils.handleResponse(response);
+  }
 
   sendImage = (file) => {
     return new Promise((resolve, reject) => {

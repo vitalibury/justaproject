@@ -32,6 +32,7 @@ export default class Router {
             case 'userEdit':
             case 'userPosts':
             case 'newPost':
+            case 'comments':
                 this.setActiveMenuItem();
                 setTimeout(() => {
                     this.dataService.appAuthorization ? modes[currentMode]() : this.redirectToAuthorization();

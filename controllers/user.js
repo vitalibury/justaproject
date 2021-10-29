@@ -20,12 +20,12 @@ export const getUserById = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const user = await User.findByIdAndUpdate(
-    {_id: req.params.id},
-    {$set: req.body},
-    {new: true}
-    );
   try {
+    const user = await User.findByIdAndUpdate(
+      {_id: req.params.id},
+      {$set: req.body},
+      {new: true}
+      );
       res.status(200).json(user);
   } catch(e) {
     errorHandler(res, e);

@@ -12,6 +12,7 @@ import DataService from "./data-service.js";
 import Router from "./router.js";
 
 import utils from "./utils.js";
+import PostComments from "./pages/comments-page.js";
 
 
 export default class App {
@@ -23,6 +24,7 @@ export default class App {
   posts = null;
   userPosts = null;
   newPost = null;
+  postComments = null;
   about = null;
   pageNotFound = null;
   router = null;
@@ -36,6 +38,7 @@ export default class App {
     this.posts = new AllPosts();
     this.userPosts = new UserPosts();
     this.newPost = new NewPost();
+    this.postComments = new PostComments();
     this.about = new About();
     this.pageNotFound = new PageNotFound();
     this.router = new Router();
@@ -78,6 +81,11 @@ export default class App {
     if (newPostForm) {
       this.newPost.handleNewPostSubmit(newPostForm);
     };
+
+    const commentForm = e.target.closest('.comment-field-form');
+    if (commentForm) {
+      this.postComments.handleCommentSubmit(commentForm);
+    }
   };
 
   handleClicks = (e) => {
@@ -115,7 +123,23 @@ export default class App {
     const createPostBtn = e.target.closest('.new-post-btn');
     if(createPostBtn) {
       this.userPosts.handleCreatePostBtn();
-    }
+    };
+
+    const ratePostBtn = e.target.closest('.rate-post-btn');
+    if(ratePostBtn) {
+      this.posts.handlePostRate(ratePostBtn.parentElement);
+    };
+
+    const commentRemoveBtn = e.target.closest('.delete-comment');
+    if(commentRemoveBtn) {
+      this.postComments.handleCommentDeleteBtn(commentRemoveBtn);
+    };
+
+    const commentAnswerBtn = e.target.closest('.comment-answer');
+    if(commentAnswerBtn) {
+      this.postComments.handleCommentAnswerBtn(commentAnswerBtn);
+    };
+
   };
 
   handleFocuses = (e) => {

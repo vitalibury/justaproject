@@ -11,7 +11,8 @@ const notificationsList = {
     deletionSuccess: 'Пользователь успешно удален.',
     savingSuccess: 'Данные пользователя успешно сохранены.',
     notSupportedFile: 'Тип файла не поддерживается. Выберите .jpg(.jpeg) или .png',
-    postCreatingSuccess: 'Пост успешно добавлен.'
+    postCreatingSuccess: 'Пост успешно добавлен.',
+    emptyCommentValue: 'Введите текст комментария.'
 };
 
 export default notificationsList;

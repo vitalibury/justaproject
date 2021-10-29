@@ -23,7 +23,12 @@ const postSchema = new Schema({
   user: {
     ref: 'users',
     type: Schema.Types.ObjectId
-  }
+  },
+  likes: [{
+    ref: 'likes',
+    type: Schema.Types.Mixed,
+    default: []
+  }]
 });
 
 export default mongoose.model('posts', postSchema);
